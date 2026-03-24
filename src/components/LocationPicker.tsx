@@ -7,6 +7,7 @@ interface LocationPickerProps {
   error: string | null;
   onRequestLocation: () => Promise<UserLocation | null>;
   onManualLocation: (lat: number, lon: number) => void;
+  onClearLocation: () => void;
 }
 
 // Major UK cities for quick selection
@@ -34,6 +35,7 @@ export function LocationPicker({
   error,
   onRequestLocation,
   onManualLocation,
+  onClearLocation,
 }: LocationPickerProps) {
   const [showCities, setShowCities] = useState(false);
   const [postcode, setPostcode] = useState('');
@@ -71,7 +73,7 @@ export function LocationPicker({
               {location.lat.toFixed(4)}, {location.lon.toFixed(4)}
             </span>
           </div>
-          <button className="btn-change-location" onClick={() => onManualLocation(0, 0)}>
+          <button className="btn-change-location" onClick={onClearLocation}>
             Change
           </button>
         </div>

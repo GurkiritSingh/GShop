@@ -28,7 +28,7 @@ type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices';
 
 function App() {
   const { items, addItem, removeItem, updateQuantity, clearList, replaceList } = useShoppingList();
-  const { location, loading: locationLoading, error: locationError, requestLocation, setManualLocation } = useLocation();
+  const { location, loading: locationLoading, error: locationError, requestLocation, setManualLocation, clearLocation } = useLocation();
 
   const [stores, setStores] = useState<NearbyStore[]>([]);
   const [recommendations, setRecommendations] = useState<StoreRecommendation[]>([]);
@@ -174,6 +174,7 @@ function App() {
               error={locationError}
               onRequestLocation={requestLocation}
               onManualLocation={setManualLocation}
+              onClearLocation={clearLocation}
             />
 
             <ShoppingList

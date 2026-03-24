@@ -36,9 +36,14 @@ export function useLocation() {
     });
   }, []);
 
+  const clearLocation = useCallback(() => {
+    setState({ location: null, loading: false, error: null });
+  }, []);
+
   return {
     ...state,
     requestLocation,
     setManualLocation,
+    clearLocation,
   };
 }
