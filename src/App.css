@@ -76,11 +76,15 @@
   margin-bottom: 4px;
 }
 
-.logo-img {
-  height: 48px;
-  width: auto;
-  display: block;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+.logo-text {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #fff 0%, #c7d2fe 50%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
 }
 
 .tagline {

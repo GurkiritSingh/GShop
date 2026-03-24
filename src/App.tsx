@@ -132,7 +132,7 @@ function App() {
       <header className="app-header">
         <div className="header-content">
           <div className="header-logo">
-            <img src="/logo.png" alt="GShop" className="logo-img" />
+            <span className="logo-text">GShop</span>
           </div>
           <p className="tagline">Find the cheapest supermarket for your shopping list</p>
         </div>
