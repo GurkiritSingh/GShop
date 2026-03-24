@@ -3,6 +3,7 @@ import type { ShoppingItem, GroceryCategory, DietaryTag } from '../types';
 import { CATEGORY_LABELS, DIETARY_LABELS } from '../types';
 import { getAvailableItems } from '../services/priceService';
 import { itemMatchesDietary } from '../services/dietaryData';
+import { VoiceInput } from './VoiceInput';
 
 interface ShoppingListProps {
   items: ShoppingItem[];
@@ -124,6 +125,8 @@ export function ShoppingList({
             </button>
           ))}
         </div>
+
+        <VoiceInput onAddItem={onAddItem} />
       </div>
 
       {items.length === 0 ? (
