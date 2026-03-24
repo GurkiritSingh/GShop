@@ -1,0 +1,50 @@
+{
+  "name": "GShop - UK Grocery Price Comparison",
+  "short_name": "GShop",
+  "description": "Compare supermarket prices for your shopping list across UK stores. Find the cheapest shop near you.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#312e81",
+  "theme_color": "#312e81",
+  "scope": "/",
+  "categories": ["shopping", "food", "finance"],
+  "lang": "en-GB",
+  "icons": [
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Shopping List",
+      "url": "/?tab=list",
+      "description": "Open your shopping list"
+    },
+    {
+      "name": "Meal Planner",
+      "url": "/?tab=meals",
+      "description": "Plan your weekly meals"
+    },
+    {
+      "name": "Compare Prices",
+      "url": "/?tab=results",
+      "description": "Compare store prices"
+    }
+  ]
+}

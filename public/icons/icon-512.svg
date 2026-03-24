@@ -1,0 +1,29 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="96" fill="#312e81"/>
+  <g transform="translate(56, 56) scale(6.25)">
+    <!-- G shape -->
+    <path
+      d="M32 5.5C18.5 5.5 7.5 16.5 7.5 30s11 24.5 24.5 24.5c9.5 0 17.8-5.4 21.9-13.4"
+      stroke="url(#ic1)"
+      stroke-width="6.5"
+      stroke-linecap="round"
+      fill="none"
+    />
+    <!-- Cart shelf -->
+    <line x1="28" y1="30" x2="54" y2="30" stroke="url(#ic1)" stroke-width="6.5" stroke-linecap="round"/>
+    <!-- Cart handle -->
+    <path d="M54 30v18" stroke="url(#ic1)" stroke-width="6.5" stroke-linecap="round"/>
+    <!-- Wheels -->
+    <circle cx="22" cy="57" r="4.5" fill="#818cf8"/>
+    <circle cx="44" cy="57" r="4.5" fill="#818cf8"/>
+    <!-- Items in cart -->
+    <rect x="24" y="17" rx="3" ry="3" width="10" height="10" fill="#34d399"/>
+    <rect x="37" y="14" rx="3" ry="3" width="9" height="13" fill="#818cf8" opacity="0.8"/>
+  </g>
+  <defs>
+    <linearGradient id="ic1" x1="7.5" y1="5.5" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+  </defs>
+</svg>
