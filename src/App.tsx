@@ -7,12 +7,17 @@ import { MealPlanner } from './components/MealPlanner';
 import { DietaryBar } from './components/DietaryBar';
 import { SavedLists } from './components/SavedLists';
 import { PriceEditor } from './components/PriceEditor';
+import { BudgetTracker } from './components/BudgetTracker';
+import { ListExport } from './components/ListExport';
+import { NotificationBell } from './components/NotificationBell';
 import { useShoppingList } from './hooks/useShoppingList';
 import { useLocation } from './hooks/useLocation';
 import { useTheme } from './hooks/useTheme';
+import { useNotifications } from './hooks/useNotifications';
 import { findNearbyStores } from './services/storeLocator';
 import { getRecommendations } from './services/recommendations';
 import { decodeFromCurrentUrl } from './services/listSharing';
+import { SUPERMARKET_INFO } from './types';
 import type { ShoppingItem, Meal, NearbyStore, StoreRecommendation, DietaryTag, GroceryCategory, WeeklyMealPlan } from './types';
 import './App.css';
 
@@ -30,6 +35,7 @@ type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices';
 function App() {
   const { theme, toggleTheme } = useTheme();
   const { items, addItem, removeItem, updateQuantity, clearList, replaceList } = useShoppingList();
+  const { notifications, unreadCount, addNotification, markAllRead, clearAll: clearNotifications, requestPermission } = useNotifications();
   const { location, loading: locationLoading, error: locationError, requestLocation, setManualLocation, clearLocation } = useLocation();
 
   const [stores, setStores] = useState<NearbyStore[]>([]);
@@ -59,16 +65,22 @@ function App() {
     if (shared.type === 'list') {
       replaceList(shared.items);
       if (shared.dietary.length > 0) handleDietaryChange(shared.dietary);
-      setImportBanner(`Imported list "${shared.name}" (${shared.items.length} items)`);
+      const msg = `Imported list "${shared.name}" (${shared.items.length} items)`;
+      setImportBanner(msg);
+      addNotification(msg, 'success');
       setActiveTab('list');
     } else if (shared.type === 'mealplan') {
       setImportedMealPlan({ plan: shared.plan, meals: shared.meals });
       if (shared.dietary.length > 0) handleDietaryChange(shared.dietary);
-      setImportBanner(`Imported meal plan "${shared.name}"`);
+      const msg = `Imported meal plan "${shared.name}"`;
+      setImportBanner(msg);
+      addNotification(msg, 'success');
       setActiveTab('meals');
     } else if (shared.type === 'meal') {
       setImportedMeal(shared.meal);
-      setImportBanner(`Imported meal "${shared.meal.name}"`);
+      const msg = `Imported meal "${shared.meal.name}"`;
+      setImportBanner(msg);
+      addNotification(msg, 'success');
       setActiveTab('meals');
     }
 
@@ -137,9 +149,18 @@ function App() {
             <span className="logo-text">GShop</span>
           </div>
           <p className="tagline">Find the cheapest supermarket for your shopping list</p>
-          <button className="theme-toggle" onClick={toggleTheme} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
-            {theme === 'light' ? '\uD83C\uDF19' : '\u2600\uFE0F'}
-          </button>
+          <div className="header-actions">
+            <NotificationBell
+              notifications={notifications}
+              unreadCount={unreadCount}
+              onMarkAllRead={markAllRead}
+              onClearAll={clearNotifications}
+              onRequestPermission={requestPermission}
+            />
+            <button className="theme-toggle" onClick={toggleTheme} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
+              {theme === 'light' ? '\uD83C\uDF19' : '\u2600\uFE0F'}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -191,6 +212,8 @@ function App() {
               onClearList={clearList}
             />
 
+            <ListExport items={items} dietary={dietaryFilters} />
+
             {items.length > 0 && location && location.lat !== 0 && (
               <button className="btn-compare" onClick={handleCompare}>
                 Compare Prices at Nearby Stores
@@ -225,6 +248,13 @@ function App() {
 
         {activeTab === 'results' && (
           <div className="results-view">
+            {recommendations.length > 0 && (
+              <BudgetTracker
+                estimatedTotal={recommendations[0]?.pricing.totalPrice}
+                storeName={recommendations[0] ? SUPERMARKET_INFO[recommendations[0].store.brand].name : undefined}
+              />
+            )}
+
             <StoreResults
               recommendations={recommendations}
               loading={storesLoading}
