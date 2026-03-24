@@ -9,6 +9,7 @@ import { SavedLists } from './components/SavedLists';
 import { PriceEditor } from './components/PriceEditor';
 import { useShoppingList } from './hooks/useShoppingList';
 import { useLocation } from './hooks/useLocation';
+import { useTheme } from './hooks/useTheme';
 import { findNearbyStores } from './services/storeLocator';
 import { getRecommendations } from './services/recommendations';
 import { decodeFromCurrentUrl } from './services/listSharing';
@@ -27,6 +28,7 @@ function loadDietaryFilters(): DietaryTag[] {
 type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices';
 
 function App() {
+  const { theme, toggleTheme } = useTheme();
   const { items, addItem, removeItem, updateQuantity, clearList, replaceList } = useShoppingList();
   const { location, loading: locationLoading, error: locationError, requestLocation, setManualLocation, clearLocation } = useLocation();
 
@@ -135,6 +137,9 @@ function App() {
             <span className="logo-text">GShop</span>
           </div>
           <p className="tagline">Find the cheapest supermarket for your shopping list</p>
+          <button className="theme-toggle" onClick={toggleTheme} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
+            {theme === 'light' ? '\uD83C\uDF19' : '\u2600\uFE0F'}
+          </button>
         </div>
       </header>
 
