@@ -3,11 +3,13 @@ import type { ShoppingItem, GroceryCategory, DietaryTag } from '../types';
 import { CATEGORY_LABELS, DIETARY_LABELS } from '../types';
 import { getAvailableItems } from '../services/priceService';
 import { itemMatchesDietary } from '../services/dietaryData';
+import { checkAllergenWarnings } from '../services/allergenData';
 import { VoiceInput } from './VoiceInput';
 
 interface ShoppingListProps {
   items: ShoppingItem[];
   dietaryFilters: DietaryTag[];
+  allergens: string[];
   onAddItem: (name: string, category: GroceryCategory, quantity?: number) => void;
   onRemoveItem: (id: string) => void;
   onUpdateQuantity: (id: string, quantity: number) => void;
@@ -19,6 +21,7 @@ const availableItems = getAvailableItems();
 export function ShoppingList({
   items,
   dietaryFilters,
+  allergens,
   onAddItem,
   onRemoveItem,
   onUpdateQuantity,
@@ -137,15 +140,13 @@ export function ShoppingList({
       ) : (
         <div className="items-list">
           {items.map((item) => {
-            // Check which active dietary filters this item naturally meets vs needs special version
             const needsSpecial = dietaryFilters.length > 0 && !itemMatchesDietary(item.name, dietaryFilters);
-            const matchedTags = dietaryFilters.filter(tag => {
-              // Show which tags this item satisfies or needs
-              return !itemMatchesDietary(item.name, [tag]);
-            });
+            const matchedTags = dietaryFilters.filter(tag => !itemMatchesDietary(item.name, [tag]));
+            const allergenWarnings = checkAllergenWarnings(item.name, allergens);
+            const hasAllergenWarning = allergenWarnings.length > 0;
 
             return (
-              <div key={item.id} className={`list-item ${needsSpecial ? 'needs-special' : ''}`}>
+              <div key={item.id} className={`list-item ${needsSpecial ? 'needs-special' : ''} ${hasAllergenWarning ? 'has-allergen' : ''}`}>
                 <div className="item-info">
                   <span className="item-name">{item.name}</span>
                   <div className="item-meta-row">
@@ -156,6 +157,11 @@ export function ShoppingList({
                       </span>
                     )}
                   </div>
+                  {hasAllergenWarning && (
+                    <div className="allergen-warning">
+                      &#x26A0;&#xFE0F; Contains: {allergenWarnings.join(', ')}
+                    </div>
+                  )}
                 </div>
                 <div className="item-controls">
                   <button

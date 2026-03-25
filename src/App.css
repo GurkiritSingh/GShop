@@ -332,6 +332,157 @@
   white-space: nowrap;
 }
 
+.list-item.has-allergen {
+  border-left: 3px solid var(--danger);
+  background: var(--danger-bg);
+}
+
+.allergen-warning {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--danger);
+  margin-top: 4px;
+  padding: 3px 8px;
+  background: rgba(239, 68, 68, 0.08);
+  border-radius: 6px;
+  text-transform: capitalize;
+}
+
+/* ===== Allergen Section in Dietary Bar ===== */
+.dietary-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.allergen-section {
+  margin-top: 8px;
+  border-top: 1px solid var(--border-light);
+  padding-top: 8px;
+}
+
+.allergen-toggle-btn {
+  padding: 5px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.15s;
+  position: relative;
+}
+
+.allergen-toggle-btn:hover {
+  border-color: var(--danger-border, #fca5a5);
+  color: var(--danger);
+}
+
+.allergen-warning-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--danger);
+  border-radius: 50%;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.allergen-panel {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.allergen-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.allergen-input-row input {
+  flex: 1;
+  padding: 8px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  background: var(--surface);
+}
+
+.allergen-input-row input:focus {
+  border-color: var(--danger);
+  outline: none;
+}
+
+.allergen-add-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-xs);
+  background: var(--danger);
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.allergen-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.allergen-suggest-chip {
+  padding: 3px 10px;
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--text-muted);
+  transition: all 0.15s;
+}
+
+.allergen-suggest-chip:hover {
+  border-color: var(--danger-border, #fca5a5);
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.allergen-active-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.allergen-active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border, #fca5a5);
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--danger);
+  text-transform: capitalize;
+}
+
+.allergen-remove {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 0;
+  line-height: 1;
+}
+
+.allergen-remove:hover { opacity: 0.7; }
+
 /* ===== Location Picker ===== */
 .location-set {
   display: flex;

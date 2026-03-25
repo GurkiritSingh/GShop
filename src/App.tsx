@@ -47,6 +47,10 @@ function App() {
   const [searchRadius, setSearchRadius] = useState(10);
   const [activeTab, setActiveTab] = useState<AppTab>('list');
   const [dietaryFilters, setDietaryFilters] = useState<DietaryTag[]>(loadDietaryFilters);
+  const [allergens, setAllergens] = useState<string[]>(() => {
+    try { const d = localStorage.getItem('gshop-allergens'); return d ? JSON.parse(d) : []; }
+    catch { return []; }
+  });
   const [importBanner, setImportBanner] = useState<string | null>(null);
   const [showAccount, setShowAccount] = useState(false);
   // Callbacks from MealPlanner for shared imports
@@ -56,6 +60,11 @@ function App() {
   const handleDietaryChange = (tags: DietaryTag[]) => {
     setDietaryFilters(tags);
     localStorage.setItem(DIETARY_STORAGE_KEY, JSON.stringify(tags));
+  };
+
+  const handleAllergensChange = (newAllergens: string[]) => {
+    setAllergens(newAllergens);
+    localStorage.setItem('gshop-allergens', JSON.stringify(newAllergens));
   };
 
   // Check URL for shared data on load
@@ -221,7 +230,7 @@ function App() {
 
         {activeTab === 'list' && (
           <div className="list-view">
-            <DietaryBar active={dietaryFilters} onChange={handleDietaryChange} />
+            <DietaryBar active={dietaryFilters} onChange={handleDietaryChange} allergens={allergens} onAllergensChange={handleAllergensChange} />
 
             <LocationPicker
               location={location}
@@ -235,6 +244,7 @@ function App() {
             <ShoppingList
               items={items}
               dietaryFilters={dietaryFilters}
+              allergens={allergens}
               onAddItem={addItem}
               onRemoveItem={removeItem}
               onUpdateQuantity={updateQuantity}
