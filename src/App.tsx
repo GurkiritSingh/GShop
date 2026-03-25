@@ -10,6 +10,7 @@ import { PriceEditor } from './components/PriceEditor';
 import { BudgetTracker } from './components/BudgetTracker';
 import { ListExport } from './components/ListExport';
 import { NotificationBell } from './components/NotificationBell';
+import { AccountPanel } from './components/AccountPanel';
 import { useShoppingList } from './hooks/useShoppingList';
 import { useLocation } from './hooks/useLocation';
 import { useTheme } from './hooks/useTheme';
@@ -30,7 +31,7 @@ function loadDietaryFilters(): DietaryTag[] {
   } catch { return []; }
 }
 
-type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices';
+type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices' | 'account';
 
 function App() {
   const { theme, toggleTheme } = useTheme();
@@ -93,6 +94,17 @@ function App() {
     handleDietaryChange(dietary);
     setActiveTab('list');
   };
+
+  const handleCloudDataLoaded = (data: {
+    shoppingList?: ShoppingItem[];
+    dietaryFilters?: DietaryTag[];
+  }) => {
+    if (data.shoppingList) replaceList(data.shoppingList);
+    if (data.dietaryFilters) handleDietaryChange(data.dietaryFilters);
+    addNotification('Data loaded from cloud', 'success');
+  };
+
+  const [_cloudSyncing, setCloudSyncing] = useState(false);
 
   const fetchStores = useCallback(async (radius?: number) => {
     if (!location || (location.lat === 0 && location.lon === 0)) return;
@@ -188,6 +200,9 @@ function App() {
           <button className={`tab ${activeTab === 'results' ? 'active' : ''}`} onClick={() => setActiveTab('results')}>
             Results
           </button>
+          <button className={`tab ${activeTab === 'account' ? 'active' : ''}`} onClick={() => setActiveTab('account')}>
+            Account
+          </button>
         </div>
 
         {activeTab === 'list' && (
@@ -244,6 +259,15 @@ function App() {
 
         {activeTab === 'prices' && (
           <PriceEditor />
+        )}
+
+        {activeTab === 'account' && (
+          <AccountPanel
+            shoppingList={items}
+            dietaryFilters={dietaryFilters}
+            onCloudDataLoaded={handleCloudDataLoaded}
+            onSyncStatusChange={setCloudSyncing}
+          />
         )}
 
         {activeTab === 'results' && (
