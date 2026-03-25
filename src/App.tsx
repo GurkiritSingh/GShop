@@ -31,7 +31,8 @@ function loadDietaryFilters(): DietaryTag[] {
   } catch { return []; }
 }
 
-type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices' | 'account';
+type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices';
+
 
 function App() {
   const { theme, toggleTheme } = useTheme();
@@ -47,6 +48,7 @@ function App() {
   const [activeTab, setActiveTab] = useState<AppTab>('list');
   const [dietaryFilters, setDietaryFilters] = useState<DietaryTag[]>(loadDietaryFilters);
   const [importBanner, setImportBanner] = useState<string | null>(null);
+  const [showAccount, setShowAccount] = useState(false);
   // Callbacks from MealPlanner for shared imports
   const [importedMealPlan, setImportedMealPlan] = useState<{ plan: WeeklyMealPlan; meals: Meal[] } | null>(null);
   const [importedMeal, setImportedMeal] = useState<Meal | null>(null);
@@ -172,6 +174,21 @@ function App() {
             <button className="theme-toggle" onClick={toggleTheme} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
               {theme === 'light' ? '\uD83C\uDF19' : '\u2600\uFE0F'}
             </button>
+            <div className="account-wrapper">
+              <button className="account-toggle" onClick={() => setShowAccount(!showAccount)} title="Account">
+                {'\uD83D\uDC64'}
+              </button>
+              {showAccount && (
+                <div className="account-dropdown">
+                  <AccountPanel
+                    shoppingList={items}
+                    dietaryFilters={dietaryFilters}
+                    onCloudDataLoaded={handleCloudDataLoaded}
+                    onSyncStatusChange={setCloudSyncing}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -199,9 +216,6 @@ function App() {
           </button>
           <button className={`tab ${activeTab === 'results' ? 'active' : ''}`} onClick={() => setActiveTab('results')}>
             Results
-          </button>
-          <button className={`tab ${activeTab === 'account' ? 'active' : ''}`} onClick={() => setActiveTab('account')}>
-            Account
           </button>
         </div>
 
@@ -259,15 +273,6 @@ function App() {
 
         {activeTab === 'prices' && (
           <PriceEditor />
-        )}
-
-        {activeTab === 'account' && (
-          <AccountPanel
-            shoppingList={items}
-            dietaryFilters={dietaryFilters}
-            onCloudDataLoaded={handleCloudDataLoaded}
-            onSyncStatusChange={setCloudSyncing}
-          />
         )}
 
         {activeTab === 'results' && (
