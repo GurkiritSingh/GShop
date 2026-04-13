@@ -152,28 +152,19 @@ function App() {
   };
 
   const isDark = theme === 'dark';
-  const bgBase = isDark ? 'bg-[#020617] text-[#f8f9ff]' : 'bg-surface text-on-surface';
-  const headerBg = isDark ? 'bg-slate-900/70 border-b border-slate-800' : 'bg-[#f8f9ff]/70';
-  // Lighter than the background + a clear right-edge so the sidebar
-  // doesn't disappear into #020617 in dark mode.
-  const sideBg = isDark
-    ? 'bg-slate-800 border-r border-slate-700 shadow-[8px_0_24px_rgba(0,0,0,0.4)]'
-    : 'bg-[#eef4ff]';
-  const navBg = isDark ? 'bg-slate-900/80' : 'bg-white/70';
-  const inactiveIcon = isDark ? 'text-slate-500' : 'text-slate-400';
 
   return (
-    <div className={`min-h-screen ${bgBase} antialiased`}>
+    <div className="min-h-screen bg-background text-on-background antialiased">
       {/* Top app bar */}
-      <header className={`fixed top-0 w-full z-40 ${headerBg} backdrop-blur-xl shadow-sm h-16 flex justify-between items-center px-4 md:px-6 md:pl-72`}>
+      <header className="fixed top-0 w-full z-40 bg-background/70 backdrop-blur-xl shadow-sm h-16 flex justify-between items-center px-4 md:px-6 md:pl-72 border-b border-outline-variant/20">
         <div className="flex items-center gap-4 md:gap-8 flex-1 min-w-0">
-          <h1 className="text-xl md:text-2xl font-black italic tracking-tighter text-[#166534] dark:text-emerald-300 md:hidden">GShop</h1>
-          <div className="hidden md:flex items-center bg-surface-container-highest dark:bg-slate-800 px-4 py-2 rounded-xl w-full max-w-md gap-3 border border-transparent dark:border-slate-700">
-            <span className="material-symbols-outlined text-outline dark:text-slate-400">search</span>
+          <h1 className="text-xl md:text-2xl font-black italic tracking-tighter text-primary md:hidden">GShop</h1>
+          <div className="hidden md:flex items-center bg-surface-container-highest px-4 py-2 rounded-xl w-full max-w-md gap-3">
+            <span className="material-symbols-outlined text-outline">search</span>
             <input
               type="text"
               placeholder="Search for ingredients or stores..."
-              className="bg-transparent border-none focus:outline-none text-sm w-full text-on-surface dark:text-white placeholder:text-outline dark:placeholder:text-slate-500"
+              className="bg-transparent border-none focus:outline-none text-sm w-full text-on-surface placeholder:text-outline"
             />
           </div>
         </div>
@@ -187,14 +178,14 @@ function App() {
           />
           <button
             onClick={toggleTheme}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-[#166534] dark:text-emerald-300 hover:bg-black/5 dark:hover:bg-white/10 transition"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-primary hover:bg-surface-container-high transition"
             title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
           >
             <span className="material-symbols-outlined">{isDark ? 'light_mode' : 'dark_mode'}</span>
           </button>
           <button
             onClick={() => setShowAccount(!showAccount)}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-[#166534] dark:text-emerald-300 hover:bg-black/5 dark:hover:bg-white/10 transition"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-primary hover:bg-surface-container-high transition"
           >
             <span className="material-symbols-outlined">person</span>
           </button>
@@ -202,12 +193,12 @@ function App() {
       </header>
 
       {/* Desktop side nav — hidden on mobile */}
-      <aside className={`hidden md:flex fixed left-0 top-0 h-full w-64 z-50 ${sideBg} flex-col p-4 gap-2 pt-20`}>
+      <aside className="hidden md:flex fixed left-0 top-0 h-full w-64 z-50 bg-surface-container-low flex-col p-4 gap-2 pt-20 border-r border-outline-variant/20">
         <div className="px-4 py-4 mb-2 flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary-container rounded-xl flex items-center justify-center text-white font-black text-lg shadow-md">G</div>
+          <div className="w-10 h-10 bg-primary-container rounded-xl flex items-center justify-center text-on-primary-container font-black text-lg shadow-md">G</div>
           <div>
-            <h2 className="font-semibold tracking-tight text-sm text-[#166534] dark:text-emerald-300 leading-tight">The Culinary Curator</h2>
-            <p className="text-[9px] uppercase tracking-widest font-bold text-[#151c25]/50 dark:text-white/40 mt-0.5">Premium Groceries</p>
+            <h2 className="font-semibold tracking-tight text-sm text-primary leading-tight">The Culinary Curator</h2>
+            <p className="text-[9px] uppercase tracking-widest font-bold text-outline mt-0.5">Premium Groceries</p>
           </div>
         </div>
         <nav className="flex-1 flex flex-col gap-1">
@@ -219,8 +210,8 @@ function App() {
                 onClick={() => setActiveTab(id)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold tracking-tight transition-transform hover:scale-[1.02] active:scale-95 ${
                   active
-                    ? 'bg-white dark:bg-slate-800 text-[#166534] dark:text-emerald-300 shadow-sm'
-                    : 'text-[#151c25]/70 dark:text-white/70 hover:bg-white/50 dark:hover:bg-white/5'
+                    ? 'bg-surface-container-highest text-primary shadow-sm'
+                    : 'text-on-surface-variant hover:bg-surface-container-high'
                 }`}
               >
                 <span className="material-symbols-outlined">{icon}</span>
@@ -230,17 +221,17 @@ function App() {
           })}
           <button
             onClick={() => setShowAccount(true)}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold tracking-tight text-[#151c25]/70 dark:text-white/70 hover:bg-white/50 dark:hover:bg-white/5 transition-transform hover:scale-[1.02] active:scale-95"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold tracking-tight text-on-surface-variant hover:bg-surface-container-high transition-transform hover:scale-[1.02] active:scale-95"
           >
             <span className="material-symbols-outlined">person</span>
             <span>Account</span>
           </button>
         </nav>
-        {/* Footer section with utility items */}
-        <div className="flex flex-col gap-1 pt-4 border-t border-black/5 dark:border-white/10">
+        {/* Footer section */}
+        <div className="flex flex-col gap-1 pt-4 border-t border-outline-variant/20">
           <button
             onClick={toggleTheme}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold tracking-tight text-[#151c25]/70 dark:text-white/70 hover:bg-white/50 dark:hover:bg-white/5 transition-transform hover:scale-[1.02] active:scale-95"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold tracking-tight text-on-surface-variant hover:bg-surface-container-high transition-transform hover:scale-[1.02] active:scale-95"
           >
             <span className="material-symbols-outlined">{isDark ? 'light_mode' : 'dark_mode'}</span>
             <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>
@@ -249,21 +240,21 @@ function App() {
             href="https://github.com/GurkiritSingh/GShop"
             target="_blank"
             rel="noopener"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold tracking-tight text-[#151c25]/70 dark:text-white/70 hover:bg-white/50 dark:hover:bg-white/5 transition-transform hover:scale-[1.02] active:scale-95"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold tracking-tight text-on-surface-variant hover:bg-surface-container-high transition-transform hover:scale-[1.02] active:scale-95"
           >
             <span className="material-symbols-outlined">help_outline</span>
             <span>Help</span>
           </a>
         </div>
-        <div className="text-[10px] text-[#151c25]/40 dark:text-white/40 px-4 py-2">
+        <div className="text-[10px] text-outline px-4 py-2">
           Prices from OpenStreetMap
         </div>
       </aside>
 
       {/* Account drawer */}
       {showAccount && (
-        <div className="fixed top-20 right-4 z-40 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-4 max-w-sm w-[calc(100%-2rem)] border border-slate-200 dark:border-slate-700">
-          <button onClick={() => setShowAccount(false)} className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">&times;</button>
+        <div className="fixed top-20 right-4 z-40 bg-surface-container rounded-2xl shadow-2xl p-4 max-w-sm w-[calc(100%-2rem)] border border-outline-variant/20">
+          <button onClick={() => setShowAccount(false)} className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center text-outline hover:bg-surface-container-high">&times;</button>
           <AccountPanel
             shoppingList={items}
             dietaryFilters={dietaryFilters}
@@ -365,7 +356,7 @@ function App() {
       </main>
 
       {/* Bottom nav — mobile only */}
-      <nav className={`md:hidden w-full ${navBg} backdrop-blur-xl shadow-[0px_-8px_24px_rgba(21,28,37,0.04)] rounded-t-[1.5rem] pb-safe mt-8`}>
+      <nav className="md:hidden w-full bg-surface-container-low/90 backdrop-blur-xl shadow-[0px_-8px_24px_rgba(0,0,0,0.08)] rounded-t-[1.5rem] pb-safe mt-8 border-t border-outline-variant/20">
         <div className="flex justify-around items-center px-2 py-2 max-w-2xl mx-auto">
           {NAV_ITEMS.map(({ id, label, icon }) => {
             const active = activeTab === id;
@@ -375,8 +366,8 @@ function App() {
                 onClick={() => setActiveTab(id)}
                 className={`flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-2xl transition-all duration-150 active:scale-90 ${
                   active
-                    ? 'bg-lime-400 dark:bg-emerald-800 text-emerald-950 dark:text-emerald-50 h-14 w-14'
-                    : `${inactiveIcon} hover:text-emerald-600`
+                    ? 'bg-secondary-container text-on-secondary-container h-14 w-14'
+                    : 'text-outline hover:text-primary'
                 }`}
                 aria-label={label}
               >

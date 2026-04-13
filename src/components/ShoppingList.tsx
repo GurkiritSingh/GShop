@@ -91,7 +91,7 @@ export function ShoppingList({
       <div className="relative">
         <input
           type="text"
-          className="w-full h-14 rounded-xl border-none px-6 pr-20 focus:ring-2 focus:ring-primary/20 transition-all bg-surface-container-highest dark:bg-slate-800 text-on-surface dark:text-white placeholder:text-outline outline-none"
+          className="w-full h-14 rounded-xl border-none px-6 pr-20 focus:ring-2 focus:ring-primary/20 transition-all bg-surface-container-highest text-on-surface placeholder:text-outline outline-none"
           placeholder="Add an item... (e.g. milk, bread, eggs)"
           value={inputValue}
           onChange={(e) => handleInputChange(e.target.value)}
@@ -107,13 +107,13 @@ export function ShoppingList({
           Add
         </button>
         {showSuggestions && (
-          <div className="absolute top-16 left-0 right-0 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-outline-variant/20 z-10 overflow-hidden">
+          <div className="absolute top-16 left-0 right-0 bg-white rounded-xl shadow-lg border border-outline-variant/20 z-10 overflow-hidden">
             {suggestions.map((s) => (
               <button
                 key={s}
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => handleAdd(s)}
-                className="w-full text-left px-4 py-3 hover:bg-surface-container-low dark:hover:bg-slate-700 text-on-surface dark:text-white text-sm"
+                className="w-full text-left px-4 py-3 hover:bg-surface-container-low text-on-surface text-sm"
               >
                 {s}
               </button>
@@ -132,7 +132,7 @@ export function ShoppingList({
             className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
               category === key
                 ? 'bg-secondary-container text-on-secondary-container'
-                : 'bg-surface-container-high dark:bg-slate-800 text-on-surface-variant dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-slate-700'
+                : 'bg-surface-container-high text-on-surface-variant hover:bg-emerald-50'
             }`}
           >
             {CATEGORY_EMOJI[key]} {label}
@@ -147,7 +147,7 @@ export function ShoppingList({
           <button
             key={item}
             onClick={() => onAddItem(item, 'other')}
-            className="px-3 py-1.5 rounded-full bg-surface-container-low dark:bg-slate-800 text-on-surface-variant dark:text-slate-300 text-xs font-medium hover:bg-primary-container hover:text-on-primary-container transition-colors"
+            className="px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant text-xs font-medium hover:bg-primary-container hover:text-on-primary-container transition-colors"
           >
             + {item}
           </button>
@@ -158,7 +158,7 @@ export function ShoppingList({
 
       {/* List header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold tracking-tight text-on-surface dark:text-white">
+        <h2 className="text-xl font-bold tracking-tight text-on-surface">
           Shopping List {items.length > 0 && <span className="text-outline font-normal text-base">· {items.length} {items.length === 1 ? 'item' : 'items'}</span>}
         </h2>
         {items.length > 0 && (
@@ -168,9 +168,9 @@ export function ShoppingList({
 
       {/* Empty state */}
       {items.length === 0 && (
-        <div className="bg-surface-container-lowest dark:bg-slate-800/50 rounded-2xl p-10 text-center">
+        <div className="bg-surface-container-lowest/50 rounded-2xl p-10 text-center">
           <span className="material-symbols-outlined text-5xl text-outline-variant mb-3 block">shopping_basket</span>
-          <p className="font-semibold text-on-surface dark:text-white">Your shopping list is empty</p>
+          <p className="font-semibold text-on-surface">Your shopping list is empty</p>
           <p className="text-sm text-outline mt-1">Add items above to compare prices across UK supermarkets</p>
         </div>
       )}
@@ -181,7 +181,7 @@ export function ShoppingList({
         <div key={cat}>
           <div className="flex items-center gap-2 mb-3">
             <span className="text-xl">{CATEGORY_EMOJI[cat]}</span>
-            <h3 className="text-lg font-extrabold tracking-tight text-on-surface dark:text-white">{CATEGORY_LABELS[cat]}</h3>
+            <h3 className="text-lg font-extrabold tracking-tight text-on-surface">{CATEGORY_LABELS[cat]}</h3>
           </div>
           <div className="space-y-3">
             {grouped[cat].map((item) => {
@@ -195,7 +195,7 @@ export function ShoppingList({
                   className={`flex items-center gap-3 p-4 rounded-xl shadow-[0px_8px_24px_rgba(21,28,37,0.02)] border transition-all ${
                     allergenWarnings.length > 0
                       ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
-                      : 'bg-surface-container-lowest dark:bg-slate-800 border-outline-variant/10'
+                      : 'bg-surface-container-lowest border-outline-variant/10'
                   }`}
                 >
                   <button
@@ -203,7 +203,7 @@ export function ShoppingList({
                     className={`w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 transition-all ${
                       isTicked
                         ? 'bg-secondary-container'
-                        : 'border-2 border-primary-container bg-white dark:bg-slate-700'
+                        : 'border-2 border-primary-container bg-white'
                     }`}
                     aria-label={isTicked ? 'Untick' : 'Tick off'}
                   >
@@ -212,7 +212,7 @@ export function ShoppingList({
                     )}
                   </button>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-semibold ${isTicked ? 'text-outline line-through' : 'text-on-surface dark:text-white'}`}>{item.name}</p>
+                    <p className={`font-semibold ${isTicked ? 'text-outline line-through' : 'text-on-surface'}`}>{item.name}</p>
                     <div className="flex items-center gap-2 mt-0.5">
                       <span className={`text-xs ${isTicked ? 'text-outline/60 line-through' : 'text-outline'}`}>qty {item.quantity}</span>
                       {needsSpecial && matchedTags.length > 0 && (
@@ -231,13 +231,13 @@ export function ShoppingList({
                     <button
                       onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
                       disabled={item.quantity <= 1}
-                      className="w-8 h-8 rounded-full bg-surface-container-high dark:bg-slate-700 text-on-surface dark:text-white font-bold disabled:opacity-30 hover:bg-primary-container hover:text-on-primary-container transition-colors"
+                      className="w-8 h-8 rounded-full bg-surface-container-high text-on-surface font-bold disabled:opacity-30 hover:bg-primary-container hover:text-on-primary-container transition-colors"
                     >
                       −
                     </button>
                     <button
                       onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                      className="w-8 h-8 rounded-full bg-surface-container-high dark:bg-slate-700 text-on-surface dark:text-white font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors"
+                      className="w-8 h-8 rounded-full bg-surface-container-high text-on-surface font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors"
                     >
                       +
                     </button>
