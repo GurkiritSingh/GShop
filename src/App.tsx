@@ -33,6 +33,13 @@ function loadDietaryFilters(): DietaryTag[] {
 
 type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices';
 
+const NAV_ITEMS: { id: AppTab; label: string; icon: string }[] = [
+  { id: 'list', label: 'List', icon: 'shopping_basket' },
+  { id: 'results', label: 'Stores', icon: 'storefront' },
+  { id: 'meals', label: 'Meals', icon: 'restaurant_menu' },
+  { id: 'saved', label: 'Saved', icon: 'favorite' },
+  { id: 'prices', label: 'Prices', icon: 'price_change' },
+];
 
 function App() {
   const { theme, toggleTheme } = useTheme();
@@ -53,7 +60,6 @@ function App() {
   });
   const [importBanner, setImportBanner] = useState<string | null>(null);
   const [showAccount, setShowAccount] = useState(false);
-  // Callbacks from MealPlanner for shared imports
   const [importedMealPlan, setImportedMealPlan] = useState<{ plan: WeeklyMealPlan; meals: Meal[] } | null>(null);
   const [importedMeal, setImportedMeal] = useState<Meal | null>(null);
 
@@ -67,7 +73,6 @@ function App() {
     localStorage.setItem('gshop-allergens', JSON.stringify(newAllergens));
   };
 
-  // Check URL for shared data on load
   useEffect(() => {
     const shared = decodeFromCurrentUrl();
     if (!shared) return;
@@ -164,15 +169,22 @@ function App() {
     setActiveTab('results');
   };
 
+  const isDark = theme === 'dark';
+  const bgBase = isDark ? 'bg-[#020617] text-[#f8f9ff]' : 'bg-surface text-on-surface';
+  const headerBg = isDark ? 'bg-slate-900/70' : 'bg-white/70';
+  const logoColor = isDark ? 'text-emerald-300' : 'text-emerald-900';
+  const navBg = isDark ? 'bg-slate-900/80' : 'bg-white/70';
+  const inactiveIcon = isDark ? 'text-slate-500' : 'text-slate-400';
+
   return (
-    <div className="app">
-      <header className="app-header">
-        <div className="header-content">
-          <div className="header-logo">
-            <span className="logo-text">GShop</span>
+    <div className={`min-h-screen ${bgBase} antialiased`}>
+      {/* Top app bar */}
+      <header className={`fixed top-0 w-full z-50 ${headerBg} backdrop-blur-xl shadow-[0px_12px_32px_rgba(21,28,37,0.06)]`}>
+        <div className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
+          <div className="flex items-center gap-3">
+            <h1 className={`text-2xl font-black italic tracking-tighter ${logoColor}`}>GShop</h1>
           </div>
-          <p className="tagline">Find the cheapest supermarket for your shopping list</p>
-          <div className="header-actions">
+          <div className="flex items-center gap-2">
             <NotificationBell
               notifications={notifications}
               unreadCount={unreadCount}
@@ -180,58 +192,51 @@ function App() {
               onClearAll={clearNotifications}
               onRequestPermission={requestPermission}
             />
-            <button className="theme-toggle" onClick={toggleTheme} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
-              {theme === 'light' ? '\uD83C\uDF19' : '\u2600\uFE0F'}
+            <button
+              onClick={toggleTheme}
+              className={`w-10 h-10 rounded-full flex items-center justify-center ${logoColor} hover:bg-black/5 dark:hover:bg-white/10 transition`}
+              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              aria-label="Toggle theme"
+            >
+              <span className="material-symbols-outlined">{isDark ? 'light_mode' : 'dark_mode'}</span>
             </button>
-            <div className="account-wrapper">
-              <button className="account-toggle" onClick={() => setShowAccount(!showAccount)} title="Account">
-                {'\uD83D\uDC64'}
-              </button>
-              {showAccount && (
-                <div className="account-dropdown">
-                  <AccountPanel
-                    shoppingList={items}
-                    dietaryFilters={dietaryFilters}
-                    onCloudDataLoaded={handleCloudDataLoaded}
-                    onSyncStatusChange={setCloudSyncing}
-                  />
-                </div>
-              )}
-            </div>
+            <button
+              onClick={() => setShowAccount(!showAccount)}
+              className={`w-10 h-10 rounded-full flex items-center justify-center ${logoColor} hover:bg-black/5 dark:hover:bg-white/10 transition`}
+              aria-label="Account"
+            >
+              <span className="material-symbols-outlined">person</span>
+            </button>
           </div>
         </div>
       </header>
 
-      {importBanner && (
-        <div className="import-banner">
-          {importBanner}
-          <button onClick={() => setImportBanner(null)}>x</button>
+      {/* Account drawer */}
+      {showAccount && (
+        <div className="fixed top-20 right-4 z-40 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-4 max-w-sm w-[calc(100%-2rem)] border border-slate-200 dark:border-slate-700">
+          <AccountPanel
+            shoppingList={items}
+            dietaryFilters={dietaryFilters}
+            onCloudDataLoaded={handleCloudDataLoaded}
+            onSyncStatusChange={setCloudSyncing}
+          />
         </div>
       )}
 
-      <main className="app-main">
-        <div className="tab-bar">
-          <button className={`tab ${activeTab === 'list' ? 'active' : ''}`} onClick={() => setActiveTab('list')}>
-            List ({items.length})
-          </button>
-          <button className={`tab ${activeTab === 'meals' ? 'active' : ''}`} onClick={() => setActiveTab('meals')}>
-            Meals
-          </button>
-          <button className={`tab ${activeTab === 'saved' ? 'active' : ''}`} onClick={() => setActiveTab('saved')}>
-            Saved
-          </button>
-          <button className={`tab ${activeTab === 'prices' ? 'active' : ''}`} onClick={() => setActiveTab('prices')}>
-            Prices
-          </button>
-          <button className={`tab ${activeTab === 'results' ? 'active' : ''}`} onClick={() => setActiveTab('results')}>
-            Results
-          </button>
+      {/* Import banner */}
+      {importBanner && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 bg-emerald-500 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-3">
+          <span className="material-symbols-outlined">check_circle</span>
+          <span className="font-semibold text-sm">{importBanner}</span>
+          <button onClick={() => setImportBanner(null)} className="ml-2 opacity-80 hover:opacity-100">&times;</button>
         </div>
+      )}
 
+      {/* Main content */}
+      <main className="pt-20 pb-28 px-4 max-w-2xl mx-auto">
         {activeTab === 'list' && (
-          <div className="list-view">
+          <div className="space-y-6">
             <DietaryBar active={dietaryFilters} onChange={handleDietaryChange} allergens={allergens} onAllergensChange={handleAllergensChange} />
-
             <LocationPicker
               location={location}
               loading={locationLoading}
@@ -240,7 +245,6 @@ function App() {
               onManualLocation={setManualLocation}
               onClearLocation={clearLocation}
             />
-
             <ShoppingList
               items={items}
               dietaryFilters={dietaryFilters}
@@ -250,11 +254,13 @@ function App() {
               onUpdateQuantity={updateQuantity}
               onClearList={clearList}
             />
-
             <ListExport items={items} dietary={dietaryFilters} />
-
             {items.length > 0 && location && location.lat !== 0 && (
-              <button className="btn-compare" onClick={handleCompare}>
+              <button
+                onClick={handleCompare}
+                className="w-full py-4 bg-primary text-on-primary rounded-2xl font-bold shadow-[0px_12px_32px_rgba(0,76,34,0.3)] hover:scale-[1.02] active:scale-95 transition-transform flex items-center justify-center gap-2"
+              >
+                <span className="material-symbols-outlined">storefront</span>
                 Compare Prices at Nearby Stores
               </button>
             )}
@@ -281,19 +287,16 @@ function App() {
           />
         )}
 
-        {activeTab === 'prices' && (
-          <PriceEditor />
-        )}
+        {activeTab === 'prices' && <PriceEditor />}
 
         {activeTab === 'results' && (
-          <div className="results-view">
+          <div className="space-y-6">
             {recommendations.length > 0 && (
               <BudgetTracker
                 estimatedTotal={recommendations[0]?.pricing.totalPrice}
                 storeName={recommendations[0] ? SUPERMARKET_INFO[recommendations[0].store.brand].name : undefined}
               />
             )}
-
             <StoreResults
               recommendations={recommendations}
               loading={storesLoading}
@@ -304,7 +307,6 @@ function App() {
                 fetchStores(15);
               }}
             />
-
             {location && location.lat !== 0 && recommendations.length > 0 && (
               <StoreMap location={location} recommendations={recommendations} />
             )}
@@ -312,11 +314,29 @@ function App() {
         )}
       </main>
 
-      <footer className="app-footer">
-        <p>
-          Prices are estimates and may vary. Store locations from OpenStreetMap.
-        </p>
-      </footer>
+      {/* Bottom nav */}
+      <nav className={`fixed bottom-0 w-full z-50 ${navBg} backdrop-blur-xl shadow-[0px_-8px_24px_rgba(21,28,37,0.04)] rounded-t-[1.5rem] pb-safe`}>
+        <div className="flex justify-around items-center px-2 py-2 max-w-2xl mx-auto">
+          {NAV_ITEMS.map(({ id, label, icon }) => {
+            const active = activeTab === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-2xl transition-all duration-150 active:scale-90 ${
+                  active
+                    ? 'bg-lime-400 dark:bg-emerald-800 text-emerald-950 dark:text-emerald-50 h-14 w-14'
+                    : `${inactiveIcon} hover:text-emerald-600 dark:hover:text-emerald-300`
+                }`}
+                aria-label={label}
+              >
+                <span className="material-symbols-outlined">{icon}</span>
+                {!active && <span className="text-[10px] font-medium uppercase tracking-widest mt-0.5">{label}</span>}
+              </button>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 }
