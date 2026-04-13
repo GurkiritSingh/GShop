@@ -22,6 +22,8 @@ export function useTheme() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    // Tailwind's `darkMode: 'class'` expects a `dark` class on <html>
+    document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 

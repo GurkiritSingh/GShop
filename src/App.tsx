@@ -197,8 +197,8 @@ function App() {
         <div className="px-4 py-4 mb-2 flex items-center gap-3">
           <div className="w-10 h-10 bg-primary-container rounded-xl flex items-center justify-center text-on-primary-container font-black text-lg shadow-md">G</div>
           <div>
-            <h2 className="font-semibold tracking-tight text-sm text-primary leading-tight">The Culinary Curator</h2>
-            <p className="text-[9px] uppercase tracking-widest font-bold text-outline mt-0.5">Premium Groceries</p>
+            <h2 className="text-xl font-black italic tracking-tighter text-primary leading-none">GShop</h2>
+            <p className="text-[9px] uppercase tracking-widest font-bold text-outline mt-1">Hits the right spot</p>
           </div>
         </div>
         <nav className="flex-1 flex flex-col gap-1">
