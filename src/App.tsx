@@ -233,7 +233,7 @@ function App() {
       )}
 
       {/* Main content */}
-      <main className="pt-20 pb-28 px-4 max-w-2xl mx-auto">
+      <main className="pt-20 pb-10 px-4 max-w-2xl mx-auto">
         {activeTab === 'list' && (
           <div className="space-y-6">
             <DietaryBar active={dietaryFilters} onChange={handleDietaryChange} allergens={allergens} onAllergensChange={handleAllergensChange} />
@@ -314,8 +314,8 @@ function App() {
         )}
       </main>
 
-      {/* Bottom nav */}
-      <nav className={`fixed bottom-0 w-full z-50 ${navBg} backdrop-blur-xl shadow-[0px_-8px_24px_rgba(21,28,37,0.04)] rounded-t-[1.5rem] pb-safe`}>
+      {/* Bottom nav (flows with page — scrolls away) */}
+      <nav className={`w-full ${navBg} backdrop-blur-xl shadow-[0px_-8px_24px_rgba(21,28,37,0.04)] rounded-t-[1.5rem] pb-safe mt-8`}>
         <div className="flex justify-around items-center px-2 py-2 max-w-2xl mx-auto">
           {NAV_ITEMS.map(({ id, label, icon }) => {
             const active = activeTab === id;
