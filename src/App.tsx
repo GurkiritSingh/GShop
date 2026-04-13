@@ -34,11 +34,11 @@ function loadDietaryFilters(): DietaryTag[] {
 type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices';
 
 const NAV_ITEMS: { id: AppTab; label: string; icon: string }[] = [
-  { id: 'list', label: 'List', icon: 'shopping_basket' },
+  { id: 'list', label: 'List', icon: 'list_alt' },
   { id: 'results', label: 'Stores', icon: 'storefront' },
-  { id: 'meals', label: 'Meals', icon: 'restaurant_menu' },
-  { id: 'saved', label: 'Saved', icon: 'favorite' },
-  { id: 'prices', label: 'Prices', icon: 'price_change' },
+  { id: 'meals', label: 'Meals', icon: 'restaurant' },
+  { id: 'saved', label: 'Saved', icon: 'bookmark' },
+  { id: 'prices', label: 'Prices', icon: 'payments' },
 ];
 
 function App() {
@@ -76,9 +76,7 @@ function App() {
   useEffect(() => {
     const shared = decodeFromCurrentUrl();
     if (!shared) return;
-
     window.history.replaceState({}, '', window.location.pathname);
-
     if (shared.type === 'list') {
       replaceList(shared.items);
       if (shared.dietary.length > 0) handleDietaryChange(shared.dietary);
@@ -100,7 +98,6 @@ function App() {
       addNotification(msg, 'success');
       setActiveTab('meals');
     }
-
     setTimeout(() => setImportBanner(null), 5000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -111,10 +108,7 @@ function App() {
     setActiveTab('list');
   };
 
-  const handleCloudDataLoaded = (data: {
-    shoppingList?: ShoppingItem[];
-    dietaryFilters?: DietaryTag[];
-  }) => {
+  const handleCloudDataLoaded = (data: { shoppingList?: ShoppingItem[]; dietaryFilters?: DietaryTag[] }) => {
     if (data.shoppingList) replaceList(data.shoppingList);
     if (data.dietaryFilters) handleDietaryChange(data.dietaryFilters);
     addNotification('Data loaded from cloud', 'success');
@@ -124,15 +118,12 @@ function App() {
 
   const fetchStores = useCallback(async (radius?: number) => {
     if (!location || (location.lat === 0 && location.lon === 0)) return;
-
     const r = radius ?? searchRadius;
     setStoresLoading(true);
     setStoresError(null);
-
     try {
       const nearbyStores = await findNearbyStores(location, r);
       setStores(nearbyStores);
-
       if (nearbyStores.length === 0) {
         setStoresError(`No supermarkets found within ${r}km. Try expanding the search or a different location.`);
       }
@@ -144,76 +135,101 @@ function App() {
     }
   }, [location, searchRadius]);
 
-  useEffect(() => {
-    fetchStores();
-  }, [fetchStores]);
+  useEffect(() => { fetchStores(); }, [fetchStores]);
 
   useEffect(() => {
     if (items.length > 0 && stores.length > 0) {
-      const recs = getRecommendations(items, stores);
-      setRecommendations(recs);
+      setRecommendations(getRecommendations(items, stores));
     } else {
       setRecommendations([]);
     }
   }, [items, stores]);
 
   const handleCompare = () => {
-    if (items.length === 0) {
-      alert('Add some items to your shopping list first!');
-      return;
-    }
-    if (!location || (location.lat === 0 && location.lon === 0)) {
-      alert('Please set your location first!');
-      return;
-    }
+    if (items.length === 0) { alert('Add some items to your shopping list first!'); return; }
+    if (!location || (location.lat === 0 && location.lon === 0)) { alert('Please set your location first!'); return; }
     setActiveTab('results');
   };
 
   const isDark = theme === 'dark';
   const bgBase = isDark ? 'bg-[#020617] text-[#f8f9ff]' : 'bg-surface text-on-surface';
-  const headerBg = isDark ? 'bg-slate-900/70' : 'bg-white/70';
-  const logoColor = isDark ? 'text-emerald-300' : 'text-emerald-900';
+  const headerBg = isDark ? 'bg-slate-900/70' : 'bg-[#f8f9ff]/70';
+  const sideBg = isDark ? 'bg-slate-900' : 'bg-[#eef4ff]';
   const navBg = isDark ? 'bg-slate-900/80' : 'bg-white/70';
   const inactiveIcon = isDark ? 'text-slate-500' : 'text-slate-400';
 
   return (
     <div className={`min-h-screen ${bgBase} antialiased`}>
       {/* Top app bar */}
-      <header className={`fixed top-0 w-full z-50 ${headerBg} backdrop-blur-xl shadow-[0px_12px_32px_rgba(21,28,37,0.06)]`}>
-        <div className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
-          <div className="flex items-center gap-3">
-            <h1 className={`text-2xl font-black italic tracking-tighter ${logoColor}`}>GShop</h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <NotificationBell
-              notifications={notifications}
-              unreadCount={unreadCount}
-              onMarkAllRead={markAllRead}
-              onClearAll={clearNotifications}
-              onRequestPermission={requestPermission}
-            />
-            <button
-              onClick={toggleTheme}
-              className={`w-10 h-10 rounded-full flex items-center justify-center ${logoColor} hover:bg-black/5 dark:hover:bg-white/10 transition`}
-              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-              aria-label="Toggle theme"
-            >
-              <span className="material-symbols-outlined">{isDark ? 'light_mode' : 'dark_mode'}</span>
-            </button>
-            <button
-              onClick={() => setShowAccount(!showAccount)}
-              className={`w-10 h-10 rounded-full flex items-center justify-center ${logoColor} hover:bg-black/5 dark:hover:bg-white/10 transition`}
-              aria-label="Account"
-            >
-              <span className="material-symbols-outlined">person</span>
-            </button>
-          </div>
+      <header className={`fixed top-0 w-full z-40 ${headerBg} backdrop-blur-xl shadow-sm h-16 flex justify-between items-center px-4 md:px-6 md:pl-72`}>
+        <div className="flex items-center gap-4 md:gap-8">
+          <h1 className="text-xl md:text-2xl font-black italic tracking-tighter text-[#166534] dark:text-emerald-300">GShop</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <NotificationBell
+            notifications={notifications}
+            unreadCount={unreadCount}
+            onMarkAllRead={markAllRead}
+            onClearAll={clearNotifications}
+            onRequestPermission={requestPermission}
+          />
+          <button
+            onClick={toggleTheme}
+            className="w-10 h-10 rounded-full flex items-center justify-center text-[#166534] dark:text-emerald-300 hover:bg-black/5 dark:hover:bg-white/10 transition"
+            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+          >
+            <span className="material-symbols-outlined">{isDark ? 'light_mode' : 'dark_mode'}</span>
+          </button>
+          <button
+            onClick={() => setShowAccount(!showAccount)}
+            className="w-10 h-10 rounded-full flex items-center justify-center text-[#166534] dark:text-emerald-300 hover:bg-black/5 dark:hover:bg-white/10 transition"
+          >
+            <span className="material-symbols-outlined">person</span>
+          </button>
         </div>
       </header>
+
+      {/* Desktop side nav — hidden on mobile */}
+      <aside className={`hidden md:flex fixed left-0 top-0 h-full w-64 z-50 ${sideBg} flex-col p-4 gap-2 pt-20`}>
+        <div className="px-4 py-2 mb-4">
+          <h2 className="text-lg font-black text-[#166534] dark:text-emerald-300 leading-tight">The Culinary Curator</h2>
+          <p className="text-[10px] uppercase tracking-[0.1em] font-bold text-[#151c25]/60 dark:text-white/60 mt-1">Premium Groceries</p>
+        </div>
+        <nav className="flex-1 flex flex-col gap-1">
+          {NAV_ITEMS.map(({ id, label, icon }) => {
+            const active = activeTab === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold tracking-tight transition-transform hover:scale-[1.02] active:scale-95 ${
+                  active
+                    ? 'bg-white dark:bg-slate-800 text-[#166534] dark:text-emerald-300 shadow-sm'
+                    : 'text-[#151c25]/70 dark:text-white/70 hover:bg-white/50 dark:hover:bg-white/5'
+                }`}
+              >
+                <span className="material-symbols-outlined">{icon}</span>
+                <span>{label}</span>
+              </button>
+            );
+          })}
+          <button
+            onClick={() => setShowAccount(true)}
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold tracking-tight text-[#151c25]/70 dark:text-white/70 hover:bg-white/50 dark:hover:bg-white/5 transition-transform hover:scale-[1.02] active:scale-95"
+          >
+            <span className="material-symbols-outlined">person</span>
+            <span>Account</span>
+          </button>
+        </nav>
+        <div className="text-[10px] text-[#151c25]/40 dark:text-white/40 px-4 py-2 border-t border-black/5 dark:border-white/5">
+          Prices from OpenStreetMap
+        </div>
+      </aside>
 
       {/* Account drawer */}
       {showAccount && (
         <div className="fixed top-20 right-4 z-40 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-4 max-w-sm w-[calc(100%-2rem)] border border-slate-200 dark:border-slate-700">
+          <button onClick={() => setShowAccount(false)} className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">&times;</button>
           <AccountPanel
             shoppingList={items}
             dietaryFilters={dietaryFilters}
@@ -232,8 +248,8 @@ function App() {
         </div>
       )}
 
-      {/* Main content */}
-      <main className="pt-20 pb-10 px-4 max-w-2xl mx-auto">
+      {/* Main content — shifted right on desktop to clear the side nav */}
+      <main className="pt-20 pb-10 px-4 md:pl-72 md:pr-8 max-w-full xl:max-w-[1400px] mx-auto">
         {activeTab === 'list' && (
           <div className="space-y-6">
             <DietaryBar active={dietaryFilters} onChange={handleDietaryChange} allergens={allergens} onAllergensChange={handleAllergensChange} />
@@ -314,8 +330,8 @@ function App() {
         )}
       </main>
 
-      {/* Bottom nav (flows with page — scrolls away) */}
-      <nav className={`w-full ${navBg} backdrop-blur-xl shadow-[0px_-8px_24px_rgba(21,28,37,0.04)] rounded-t-[1.5rem] pb-safe mt-8`}>
+      {/* Bottom nav — mobile only */}
+      <nav className={`md:hidden w-full ${navBg} backdrop-blur-xl shadow-[0px_-8px_24px_rgba(21,28,37,0.04)] rounded-t-[1.5rem] pb-safe mt-8`}>
         <div className="flex justify-around items-center px-2 py-2 max-w-2xl mx-auto">
           {NAV_ITEMS.map(({ id, label, icon }) => {
             const active = activeTab === id;
@@ -326,7 +342,7 @@ function App() {
                 className={`flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-2xl transition-all duration-150 active:scale-90 ${
                   active
                     ? 'bg-lime-400 dark:bg-emerald-800 text-emerald-950 dark:text-emerald-50 h-14 w-14'
-                    : `${inactiveIcon} hover:text-emerald-600 dark:hover:text-emerald-300`
+                    : `${inactiveIcon} hover:text-emerald-600`
                 }`}
                 aria-label={label}
               >

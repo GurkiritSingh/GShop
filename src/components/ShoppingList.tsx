@@ -175,7 +175,8 @@ export function ShoppingList({
         </div>
       )}
 
-      {/* Grouped items */}
+      {/* Grouped items — 1 col on mobile, 2 on tablet, 3 on desktop */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
       {orderedCategories.map((cat) => (
         <div key={cat}>
           <div className="flex items-center gap-2 mb-3">
@@ -254,6 +255,7 @@ export function ShoppingList({
           </div>
         </div>
       ))}
+      </div>
     </section>
   );
 }
