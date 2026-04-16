@@ -71,9 +71,14 @@ export function onAuthChange(callback: (user: User | null) => void) {
   return () => subscription.unsubscribe();
 }
 
+let _currentUser: User | null = null;
+// Keep track of current user via auth state changes
+supabase.auth.onAuthStateChange((_event, session) => {
+  _currentUser = session?.user ? toUser(session.user) : null;
+});
+
 export function getCurrentUser(): User | null {
-  // Sync method — may not be available immediately
-  return null;
+  return _currentUser;
 }
 
 // ===== Cloud Sync =====
