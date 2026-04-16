@@ -11,6 +11,7 @@ import { BudgetTracker } from './components/BudgetTracker';
 import { ListExport } from './components/ListExport';
 import { NotificationBell } from './components/NotificationBell';
 import { AccountPanel } from './components/AccountPanel';
+import { AIAssistant } from './components/AIAssistant';
 import { useShoppingList } from './hooks/useShoppingList';
 import { useLocation } from './hooks/useLocation';
 import { useTheme } from './hooks/useTheme';
@@ -31,10 +32,11 @@ function loadDietaryFilters(): DietaryTag[] {
   } catch { return []; }
 }
 
-type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices';
+type AppTab = 'list' | 'results' | 'meals' | 'saved' | 'prices' | 'ai';
 
 const NAV_ITEMS: { id: AppTab; label: string; icon: string }[] = [
   { id: 'list', label: 'List', icon: 'list_alt' },
+  { id: 'ai', label: 'AI', icon: 'smart_toy' },
   { id: 'results', label: 'Stores', icon: 'storefront' },
   { id: 'meals', label: 'Meals', icon: 'restaurant' },
   { id: 'saved', label: 'Saved', icon: 'bookmark' },
@@ -325,6 +327,14 @@ function App() {
             currentDietary={dietaryFilters}
             onLoadList={handleLoadList}
             onAddToList={(name: string, category: GroceryCategory, quantity: number) => addItem(name, category, quantity)}
+          />
+        )}
+
+        {activeTab === 'ai' && (
+          <AIAssistant
+            onAddToShoppingList={addItem}
+            dietaryFilters={dietaryFilters}
+            allergens={allergens}
           />
         )}
 
