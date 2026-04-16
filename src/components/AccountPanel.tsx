@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react';
-import type { User } from 'firebase/auth';
 import {
   isConfigured, signUp, logIn, logInWithGoogle, logOutUser, onAuthChange,
   saveToCloud, loadFromCloud,
 } from '../services/firebase';
+
+// User shape matching what firebase.ts exports
+interface User {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+}
 import type { ShoppingItem, DietaryTag, WeeklyMealPlan, Meal } from '../types';
 
 interface AccountPanelProps {
