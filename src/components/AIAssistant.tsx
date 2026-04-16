@@ -66,7 +66,11 @@ export function AIAssistant({ onAddToShoppingList, dietaryFilters, allergens }: 
       setMessages(prev => [...prev, assistantEntry]);
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Something went wrong';
-      setMessages(prev => [...prev, { role: 'assistant', content: `Sorry, I hit an error: ${errorMsg}. Please try again.` }]);
+      const isNotConfigured = errorMsg.includes('not configured') || errorMsg.includes('API key') || errorMsg.includes('Failed to fetch') || errorMsg.includes('NetworkError');
+      const displayMsg = isNotConfigured
+        ? 'The AI assistant needs a backend with a Claude API key to work. This is a proof of concept — once the backend is configured, I\'ll be able to help you plan meals and build shopping lists!\n\nThe rest of GShop works perfectly without it.'
+        : `Sorry, I hit an error: ${errorMsg}. Please try again.`;
+      setMessages(prev => [...prev, { role: 'assistant', content: displayMsg }]);
     } finally {
       setLoading(false);
       inputRef.current?.focus();
