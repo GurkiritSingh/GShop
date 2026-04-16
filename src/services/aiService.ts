@@ -1,7 +1,8 @@
 import type { GroceryCategory, DietaryTag } from '../types';
 
-// Backend URL — MediEat server on Render hosts the AI endpoint
-const AI_BACKEND = import.meta.env.VITE_AI_BACKEND_URL || 'https://medieat.onrender.com';
+// Supabase Edge Function hosts the AI endpoint
+const SUPABASE_URL = 'https://qrswutkoygynhtzpxqfi.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyc3d1dGtveWd5bmh0enB4cWZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MjQ3MTcsImV4cCI6MjA5MDEwMDcxN30.ITBPc-Qm2LlSk4asrXUfor9JFSZ95iT3AYJ6Cm-vlPY';
 
 export interface AIShoppingItem {
   name: string;
@@ -34,9 +35,13 @@ export async function sendAIMessage(
   allergens: string[],
   budget?: number
 ): Promise<AIResponse> {
-  const response = await fetch(`${AI_BACKEND}/api/gshop/ai`, {
+  const response = await fetch(`${SUPABASE_URL}/functions/v1/gshop-ai`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+    },
     body: JSON.stringify({
       message,
       conversationHistory: history,
