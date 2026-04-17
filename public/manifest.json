@@ -2,41 +2,41 @@
   "name": "GShop - UK Grocery Price Comparison",
   "short_name": "GShop",
   "description": "Compare supermarket prices for your shopping list across UK stores. Find the cheapest shop near you.",
-  "start_url": "/",
+  "start_url": "/GShop/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#312e81",
   "theme_color": "#312e81",
-  "scope": "/",
+  "scope": "/GShop/",
   "categories": ["shopping", "food", "finance"],
   "lang": "en-GB",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "/GShop/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "/GShop/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/maskable-192.png",
+      "src": "/GShop/icons/maskable-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icons/maskable-512.png",
+      "src": "/GShop/icons/maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/favicon.svg",
+      "src": "/GShop/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
@@ -45,17 +45,17 @@
   "shortcuts": [
     {
       "name": "Shopping List",
-      "url": "/?tab=list",
+      "url": "/GShop/?tab=list",
       "description": "Open your shopping list"
     },
     {
       "name": "Meal Planner",
-      "url": "/?tab=meals",
+      "url": "/GShop/?tab=meals",
       "description": "Plan your weekly meals"
     },
     {
       "name": "Compare Prices",
-      "url": "/?tab=results",
+      "url": "/GShop/?tab=results",
       "description": "Compare store prices"
     }
   ]

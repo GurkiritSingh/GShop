@@ -1,10 +1,11 @@
-const CACHE_NAME = 'gshop-v1';
+const CACHE_NAME = 'gshop-v2';
+const BASE = '/GShop/';
 const STATIC_ASSETS = [
-  '/',
-  '/manifest.json',
-  '/favicon.svg',
-  '/icons/icon-512.svg',
-  '/icons/maskable-512.svg',
+  BASE,
+  BASE + 'manifest.json',
+  BASE + 'favicon.svg',
+  BASE + 'icons/icon-512.svg',
+  BASE + 'icons/maskable-512.svg',
 ];
 
 // Install: cache static assets
@@ -74,7 +75,7 @@ self.addEventListener('fetch', (event) => {
       }).catch(() => {
         // Offline fallback for navigation
         if (event.request.mode === 'navigate') {
-          return caches.match('/');
+          return caches.match(BASE);
         }
         return new Response('Offline', { status: 503 });
       });

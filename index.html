@@ -6,12 +6,12 @@
     <meta name="description" content="Compare supermarket prices for your shopping list across UK stores. Find the cheapest shop near you." />
 
     <!-- PWA -->
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="/GShop/manifest.json" />
     <meta name="theme-color" content="#312e81" />
 
     <!-- Icons -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/icons/icon-512.svg" />
+    <link rel="icon" type="image/svg+xml" href="/GShop/favicon.svg" />
+    <link rel="apple-touch-icon" href="/GShop/icons/icon-512.png" />
 
     <!-- Apple PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -186,7 +186,7 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch(() => {});
+          navigator.serviceWorker.register('/GShop/sw.js', { scope: '/GShop/' }).catch(() => {});
         });
       }
     </script>
